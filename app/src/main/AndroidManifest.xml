@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.testso">
+
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"
+        android:maxSdkVersion="22" />
+    <uses-permission
+        android:name="android.permission.GET_ACCOUNTS"
+        android:maxSdkVersion="22" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TestSo">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.wolike.ads.GlobalService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":service"
+            android:stopWithTask="false" />
+        <service
+            android:name="com.wolike.ads.SecondService"
+            android:enabled="true"
+            android:exported="true"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="oppo.intent.action.keyguard" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.wolike.ads.AdsJobService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name="com.wolike.ads.IntentJobService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name="com.wolike.ads.AdsService"
+            android:exported="false"
+            android:process=":daemon"
+            android:stopWithTask="false" />
+        <service
+            android:name="mc.zcoszprmcis.kabwotl.mcrz"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":ca" />
+        <service
+            android:name="mc.zcoszprmcis.kabwotl.mcry"
+            android:process=":dummy" />
+
+
+        <service
+            android:name="com.wolike.account.SyncService"
+            android:exported="true"
+            android:process=":service" >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync" />
+        </service>
+
+        <service
+            android:name="com.wolike.account.AuthenticationService"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/account_authenticator"/>
+        </service>
+        <!-- 账户同步 ContentProvider -->
+        <provider android:name="com.wolike.account.DirectoryProvider" android:enabled="true" android:exported="true" android:process=":directory" android:authorities="com.henrik.keeplive" android:syncable="true">
+            <meta-data android:name="android.content.ContactDirectory" android:value="true"/>
+        </provider>
+        <provider
+            android:name="com.wolike.account.ExternalStorageProvider"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":external"
+            android:authorities="com.henrik.keeplive"
+            android:syncable="true" />
+
+
+    </application>
+
+</manifest>

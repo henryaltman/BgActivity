@@ -1,0 +1,54 @@
+package com.wolike.ads.utils;
+
+/* loaded from: classes2.dex */
+public class ADDef {
+    public static final String AD_APPID = "appid";
+    public static final String AD_APPKEY = "appkey";
+    public static final String AD_AgentName_ADView = "adview";
+    public static final String AD_AgentName_AdsMogo = "AdsMogo";
+    public static final String AD_AgentName_Ali = "ali";
+    public static final String AD_AgentName_Anzhi = "anzhi";
+    public static final String AD_AgentName_AppLovin = "AppLovin";
+    public static final String AD_AgentName_Baidu = "baidu";
+    public static final String AD_AgentName_DOMOB = "domob";
+    public static final String AD_AgentName_DianView = "DianView";
+    public static final String AD_AgentName_FB = "facebook";
+    public static final String AD_AgentName_Fyber = "Fyber";
+    public static final String AD_AgentName_GDT = "gdt";
+    public static final String AD_AgentName_GDTNative = "gdtNative";
+    public static final String AD_AgentName_Gionee = "gionee";
+    public static final String AD_AgentName_Google = "Admob";
+    public static final String AD_AgentName_GoogleNative = "AdmobNative";
+    public static final String AD_AgentName_InMobi = "inmobi";
+    public static final String AD_AgentName_Meizu = "meizu";
+    public static final String AD_AgentName_Mi = "MiAd";
+    public static final String AD_AgentName_OPPO = "OPPO";
+    public static final String AD_AgentName_Pingcoo = "pingcoo";
+    public static final String AD_AgentName_Unity = "unity";
+    public static final String AD_AgentName_Vigame = "Qpay";
+    public static final String AD_AgentName_Vungle = "vungle";
+    public static final String AD_AgentName_YYB = "yyb";
+    public static final String AD_AgentName_YuMi = "yumi";
+    public static final String AD_CODE = "code";
+    public static final String AD_FILES_PATH = "wbADFiles";
+    public static final String AD_PARAM = "adparam";
+    public static final String AD_TypeName_Banner = "banner";
+    public static final String AD_TypeName_Banner_50 = "banner50";
+    public static final String AD_TypeName_Intersitial = "plaque";
+    public static final String AD_TypeName_MSG = "msg";
+    public static final String AD_TypeName_OfferWall = "wall";
+    public static final String AD_TypeName_Splash = "splash";
+    public static final String AD_TypeName_Video = "video";
+    public static final int BannerHAlignment_CENTER = 1;
+    public static final int BannerHAlignment_LEFT = 0;
+    public static final int BannerHAlignment_RIGHT = 2;
+    public static final int BannerVAlignment_BUTTOM = 2;
+    public static final int BannerVAlignment_CENTER = 1;
+    public static final int BannerVAlignment_TOP = 0;
+    public static final int TJ_CLICKED = 2;
+    public static final int TJ_REPORT = 0;
+    public static final int TJ_REPORT_FAIL = 0;
+    public static final int TJ_REPORT_SUCC = 1;
+    public static final int TJ_SELF_SHOW = -1;
+    public static final int TJ_SHOW = 1;
+}

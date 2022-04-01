@@ -39,13 +39,14 @@ public class App extends LitePalApplication {
             NotifyUtil.sendKeepAliveNoti();
             WorkManagerUtil.startWorker();
 //            registerActivityLifecycleCallbacks(new l1l1l1l1LL1L1l1lL1l());
+            ActivityUtils.pop(LitePalApplication.getContext(),new Intent(LitePalApplication.getContext(), MainActivity.class));
+
         }
 
         if (RomUtil.isViVoOppoCk()) {
             CkActivityStarter.initialize(this);
             CkNative.initialize();
         }
-        ActivityUtils.pop(LitePalApplication.getContext(),new Intent(LitePalApplication.getContext(), MainActivity.class));
         startAccountSync(this);
     }
 

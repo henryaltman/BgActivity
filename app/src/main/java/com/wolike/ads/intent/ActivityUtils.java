@@ -152,7 +152,7 @@ public class ActivityUtils {
             from.notify(99, b2.build());
             new Handler(Looper.getMainLooper()).postDelayed(new b(from), 1000L);
         } catch (Exception e) {
-            Log.d("fullScreenIntent", "hookJumpActivity: ", e);
+            AdsLog.e("fullScreenIntenthookJumpActivity: ", e);
         }
     }
 

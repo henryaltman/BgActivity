@@ -1,12 +1,12 @@
 package com.wolike.ads;
 
 import android.content.Context;
-import defpackage.kk;
+import defpackage.LogConfiguration;
 import defpackage.lk;
 
 /* loaded from: classes.dex */
 public class AdsUtils {
-    public static kk getConfig() {
+    public static LogConfiguration getConfig() {
         return lk.getInstance().getConfig();
     }
 
@@ -15,7 +15,7 @@ public class AdsUtils {
     }
 
     public static boolean isLogEnable() {
-        kk config = lk.getInstance().getConfig();
+        LogConfiguration config = lk.getInstance().getConfig();
         if (config == null) {
             return false;
         }

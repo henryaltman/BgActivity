@@ -13,9 +13,6 @@ import android.os.Message;
 import android.os.PowerManager;
 import androidx.annotation.NonNull;
 
-import com.example.testso.LitePalApplication;
-import com.example.testso.MainActivity;
-import com.wolike.ads.intent.ActivityUtils;
 import com.wolike.ads.intent.IntentUtils;
 import com.wolike.ads.utils.RomUtil;
 import com.wolike.ads.utils.SafeHandler;
@@ -23,7 +20,7 @@ import defpackage.ok;
 import java.util.concurrent.TimeUnit;
 
 /* loaded from: classes.dex */
-public class GlobalService extends BaseService implements ok.Ll1lLl1l1LL1l1Ll, Handler.Callback {
+public class GlobalService extends BaseService implements ok.screenMonitor, Handler.Callback {
     public static final String c = "intent";
     public static final String d = "start_activity";
     public static final int e = 1;

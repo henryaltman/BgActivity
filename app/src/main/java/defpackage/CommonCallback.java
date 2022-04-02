@@ -4,7 +4,7 @@ import android.content.Context;
 import androidx.core.app.NotificationCompat;
 
 /* loaded from: classes.dex */
-public interface mk {
+public interface CommonCallback {
     String getIntentChannelId(Context context);
 
     NotificationCompat.Builder getIntentNotificationBuilder(Context context);

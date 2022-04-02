@@ -12,7 +12,7 @@ public class ProcessHolder {
     public static String PROCESS_NAME = null;
     public static boolean a = false;
 
-    public static String a(Context context) {
+    public static String getProcessName(Context context) {
         int myPid = Process.myPid();
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (activityManager == null) {
@@ -28,7 +28,7 @@ public class ProcessHolder {
 
     public static void init(Context context) {
         if (!a) {
-            String a2 = a(context);
+            String a2 = getProcessName(context);
             String packageName = context.getPackageName();
             PROCESS_NAME = a2;
             if (context.getPackageName().equals(a2)) {
@@ -47,5 +47,12 @@ public class ProcessHolder {
             }
             a = true;
         }
+    }
+
+    public static boolean isMainProcess(Context context) {
+        String a2 = getProcessName(context);
+        AdsLog.d("process:"+a2);
+        String packageName = context.getPackageName();
+        return packageName.equals(a2);
     }
 }

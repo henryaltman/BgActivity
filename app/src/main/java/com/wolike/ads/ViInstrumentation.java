@@ -3,7 +3,7 @@ package com.wolike.ads;
 import android.app.Instrumentation;
 import android.os.Bundle;
 import defpackage.lk;
-import defpackage.mk;
+import defpackage.CommonCallback;
 
 /* loaded from: classes.dex */
 public class ViInstrumentation extends Instrumentation {
@@ -12,7 +12,7 @@ public class ViInstrumentation extends Instrumentation {
         super.onCreate(bundle);
         AdsLog.d("ViInstrumentation onCreate");
         try {
-            mk callback = lk.getInstance().getCallback();
+            CommonCallback callback = lk.getInstance().getCallback();
             if (callback != null) {
                 callback.onInstrumentationCreate();
             }

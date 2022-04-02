@@ -11,77 +11,70 @@ import java.util.List;
 public class ok {
     public static final int QUERY_INTERVAL = 50;
     public static final int QUERY_INTERVAL_LARGE = 1000;
-    public static int c = 50;
-    public lilil1liLi1lLL1l1l a;
-    public List<Ll1lLl1l1LL1l1Ll> b;
+    public static int queryInterval = 50;
+    public MonitorThread thread;
+    public List<screenMonitor> monitorList;
 
     /* loaded from: classes.dex */
-    public interface Ll1lLl1l1LL1l1Ll {
+    public interface screenMonitor {
         void onScreenMonitorTimer(boolean z);
 
         void onScreenStatusChanged(boolean z);
     }
 
-    /* loaded from: classes.dex */
-    public static class l1l1l1l1LL1L1l1lL1l {
+    public static class Holder {
 
-        /* renamed from: Ll1lLl1l1LL1l1Ll  reason: collision with root package name */
-        public static final ok f3981Ll1lLl1l1LL1l1Ll = new ok();
+        public static final ok OkInstance = new ok();
     }
 
-    /* loaded from: classes.dex */
-    public static class lilil1liLi1lLL1l1l extends Thread {
+    public static class MonitorThread extends Thread {
 
-        /* renamed from: Ll1lLl1l1LL1l1Ll  reason: collision with root package name */
-        public PowerManager f3982Ll1lLl1l1LL1l1Ll;
+        public PowerManager powerManager;
 
-        /* renamed from: lilil1liLi1lLL1l1l  reason: collision with root package name */
-        public boolean f3985lilil1liLi1lLL1l1l;
+        public boolean tempScreenStatus;
 
-        /* renamed from: l1l1l1l1LL1L1l1lL1l  reason: collision with root package name */
-        public volatile int f3984l1l1l1l1LL1L1l1lL1l = 3;
+        public volatile int screenMonitorStatus = 3;
 
-        /* renamed from: l1L1L1L1L1l1LLL1LL1ll  reason: collision with root package name */
         public int f3983l1L1L1L1L1l1LLL1LL1ll = 0;
 
-        public lilil1liLi1lLL1l1l() {
+        public MonitorThread() {
             PowerManager powerManager = (PowerManager) AdsUtils.getContext().getSystemService(Context.POWER_SERVICE);
-            this.f3982Ll1lLl1l1LL1l1Ll = powerManager;
+            this.powerManager = powerManager;
             if (powerManager != null) {
-                this.f3985lilil1liLi1lLL1l1l = powerManager.isScreenOn();
+                this.tempScreenStatus = powerManager.isScreenOn();
             }
         }
 
-        public synchronized void Ll1lLl1l1LL1l1Ll() {
-            AdsLog.d("ScreenMonitor pauseMonitor,cur status=" + this.f3984l1l1l1l1LL1L1l1lL1l);
-            if (this.f3984l1l1l1l1LL1L1l1lL1l == 1) {
-                this.f3984l1l1l1l1LL1L1l1lL1l = 2;
+        public synchronized void pauseMonitor() {
+            AdsLog.d("ScreenMonitor pauseMonitor,cur status=" + this.screenMonitorStatus);
+            if (this.screenMonitorStatus == 1) {
+                this.screenMonitorStatus = 2;
                 AdsLog.d("ScreenMonitor pauseMonitor success");
             }
         }
 
-        public synchronized void l1L1L1L1L1l1LLL1LL1ll() {
-            AdsLog.d("ScreenMonitor stopMonitor,cur status=" + this.f3984l1l1l1l1LL1L1l1lL1l);
-            if (this.f3984l1l1l1l1LL1L1l1lL1l != 3) {
-                this.f3984l1l1l1l1LL1L1l1lL1l = 3;
+        public synchronized void stopMonitor() {
+            AdsLog.d("ScreenMonitor stopMonitor,cur status=" + this.screenMonitorStatus);
+            if (this.screenMonitorStatus != 3) {
+                this.screenMonitorStatus = 3;
                 AdsLog.d("ScreenMonitor stopMonitor success");
             }
         }
 
-        public synchronized void l1l1l1l1LL1L1l1lL1l() {
-            AdsLog.d("ScreenMonitor startMonitor,cur status=" + this.f3984l1l1l1l1LL1L1l1lL1l);
-            if (this.f3984l1l1l1l1LL1L1l1lL1l != 1) {
-                this.f3984l1l1l1l1LL1L1l1lL1l = 1;
+        public synchronized void startMonitor() {
+            AdsLog.d("ScreenMonitor startMonitor,cur status=" + this.screenMonitorStatus);
+            if (this.screenMonitorStatus != 1) {
+                this.screenMonitorStatus = 1;
                 start();
                 notify();
                 AdsLog.d("ScreenMonitor startMonitor success");
             }
         }
 
-        public synchronized void lilil1liLi1lLL1l1l() {
-            AdsLog.d("ScreenMonitor resumeMonitor,cur status=" + this.f3984l1l1l1l1LL1L1l1lL1l);
-            if (this.f3984l1l1l1l1LL1L1l1lL1l == 2) {
-                this.f3984l1l1l1l1LL1L1l1lL1l = 1;
+        public synchronized void resumeMonitor() {
+            AdsLog.d("ScreenMonitor resumeMonitor,cur status=" + this.screenMonitorStatus);
+            if (this.screenMonitorStatus == 2) {
+                this.screenMonitorStatus = 1;
                 notify();
                 AdsLog.d("ScreenMonitor resumeMonitor success");
             }
@@ -89,9 +82,9 @@ public class ok {
 
         @Override // java.lang.Thread, java.lang.Runnable
         public void run() {
-            while (this.f3984l1l1l1l1LL1L1l1lL1l != 3) {
+            while (this.screenMonitorStatus != 3) {
                 synchronized (this) {
-                    while (this.f3984l1l1l1l1LL1L1l1lL1l != 1) {
+                    while (this.screenMonitorStatus != 1) {
                         try {
                             wait();
                         } catch (InterruptedException e) {
@@ -99,9 +92,9 @@ public class ok {
                         }
                     }
                 }
-                boolean isScreenOn = this.f3982Ll1lLl1l1LL1l1Ll.isScreenOn();
-                if (this.f3985lilil1liLi1lLL1l1l != isScreenOn) {
-                    this.f3985lilil1liLi1lLL1l1l = isScreenOn;
+                boolean isScreenOn = this.powerManager.isScreenOn();
+                if (this.tempScreenStatus != isScreenOn) {
+                    this.tempScreenStatus = isScreenOn;
                     ok.getInstance().a(isScreenOn);
                 }
                 if (this.f3983l1L1L1L1L1l1LLL1LL1ll >= 100) {
@@ -119,69 +112,68 @@ public class ok {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public synchronized void a(boolean z) {
-        if (this.b != null) {
-            for (Ll1lLl1l1LL1l1Ll ll1lLl1l1LL1l1Ll : this.b) {
-                ll1lLl1l1LL1l1Ll.onScreenStatusChanged(z);
+        if (this.monitorList != null) {
+            for (screenMonitor screenMonitor : this.monitorList) {
+                screenMonitor.onScreenStatusChanged(z);
             }
         }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     public synchronized void b(boolean z) {
-        if (this.b != null) {
-            for (Ll1lLl1l1LL1l1Ll ll1lLl1l1LL1l1Ll : this.b) {
-                ll1lLl1l1LL1l1Ll.onScreenMonitorTimer(z);
+        if (this.monitorList != null) {
+            for (screenMonitor screenMonitor : this.monitorList) {
+                screenMonitor.onScreenMonitorTimer(z);
             }
         }
     }
 
     public static ok getInstance() {
-        return l1l1l1l1LL1L1l1lL1l.f3981Ll1lLl1l1LL1l1Ll;
+        return Holder.OkInstance;
     }
 
     public static void setQueryInterval(int i2) {
-        c = i2;
+        queryInterval = i2;
     }
 
-    public synchronized void addCallback(Ll1lLl1l1LL1l1Ll ll1lLl1l1LL1l1Ll) {
-        if (this.b == null) {
-            this.b = new ArrayList();
+    public synchronized void addCallback(screenMonitor screenMonitor) {
+        if (this.monitorList == null) {
+            this.monitorList = new ArrayList();
         }
-        if (!this.b.contains(ll1lLl1l1LL1l1Ll)) {
-            this.b.add(ll1lLl1l1LL1l1Ll);
+        if (!this.monitorList.contains(screenMonitor)) {
+            this.monitorList.add(screenMonitor);
         }
     }
 
     public synchronized void pause() {
-        if (this.a != null) {
-            this.a.Ll1lLl1l1LL1l1Ll();
+        if (this.thread != null) {
+            this.thread.pauseMonitor();
         }
     }
 
-    public synchronized void removeCallback(Ll1lLl1l1LL1l1Ll ll1lLl1l1LL1l1Ll) {
-        if (this.b != null) {
-            this.b.remove(ll1lLl1l1LL1l1Ll);
+    public synchronized void removeCallback(screenMonitor screenMonitor) {
+        if (this.monitorList != null) {
+            this.monitorList.remove(screenMonitor);
         }
     }
 
     public synchronized void resume() {
-        if (this.a != null) {
-            this.a.lilil1liLi1lLL1l1l();
+        if (this.thread != null) {
+            this.thread.resumeMonitor();
         }
     }
 
     public synchronized void start() {
-        if (this.a == null || !this.a.isAlive()) {
-            this.a = new lilil1liLi1lLL1l1l();
+        if (this.thread == null || !this.thread.isAlive()) {
+            this.thread = new MonitorThread();
         }
-        this.a.l1l1l1l1LL1L1l1lL1l();
+        this.thread.startMonitor();
     }
 
     public synchronized void stop() {
-        if (this.a != null) {
-            this.a.l1L1L1L1L1l1LLL1LL1ll();
+        if (this.thread != null) {
+            this.thread.stopMonitor();
         }
     }
 }

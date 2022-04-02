@@ -3,9 +3,15 @@ package com.wolike.ads;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+
+import com.example.testso.App;
+import com.example.testso.MainActivity;
 import com.wolike.ads.screenmonitor.ScreenMonitorHelper;
+
+import defpackage.lk;
 
 /* loaded from: classes.dex */
 public class AdsReceiver extends BroadcastReceiver {
@@ -49,6 +55,7 @@ public class AdsReceiver extends BroadcastReceiver {
                         @Override // java.lang.Runnable
                         public void run() {
                             ScreenMonitorHelper.pause();
+
                         }
                     }, 100L);
                 } else if (c == 2) {
@@ -56,10 +63,33 @@ public class AdsReceiver extends BroadcastReceiver {
                         @Override // java.lang.Runnable
                         public void run() {
                             ScreenMonitorHelper.resume();
+
+                        }
+                    }, 100L);
+                }else if (c ==3 )
+                {
+                    this.handler.postDelayed(new Runnable() { // from class: com.wolike.ads.AdsReceiver.1
+                        @Override // java.lang.Runnable
+                        public void run() {
+                            startActivity(App.getContext(), new Intent(App.getContext(), MainActivity.class));
                         }
                     }, 100L);
                 }
             }
         }
+    }
+
+
+    private void startActivity(Context context ,Intent intent){
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        if (Build.VERSION.SDK_INT <21){
+            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+            context.startActivity(intent);
+            return;
+        }
+        intent.addCategory("android.intent.category.LAUNCHER");
+        intent.setAction("android.intent.action.MAIN");
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        lk.startActivity(context,intent);
     }
 }

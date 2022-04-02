@@ -14,15 +14,15 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.testso.R;
 import com.wolike.ads.utils.PhoneInfoUtil;
 import com.wolike.ads.utils.RomUtil;
-import defpackage.mk;
+import defpackage.CommonCallback;
 
 
 /* loaded from: classes.dex */
-public class AdsCallback implements mk {
+public class AdsCallback implements CommonCallback {
     private static final String TAG = "AdsCallback";
     public static final String a = "com.jiejing.clean.brandnew";
 
-    @Override // defpackage.mk
+    @Override
     @TargetApi(26)
     public String getIntentChannelId(Context context) {
         NotificationManagerCompat from = NotificationManagerCompat.from(context);
@@ -37,7 +37,7 @@ public class AdsCallback implements mk {
         return notificationChannel.getId();
     }
 
-    @Override // defpackage.mk
+    @Override
     public NotificationCompat.Builder getIntentNotificationBuilder(Context context) {
         NotificationCompat.Builder builder;
         if (Build.VERSION.SDK_INT >= 26) {
@@ -57,12 +57,12 @@ public class AdsCallback implements mk {
 
     @Override // defpackage.mk
     public String getSyncAccountName() {
-        return "com_jiejing_clean";
+        return "test";
     }
 
     @Override // defpackage.mk
     public String getSyncAccountType() {
-        return "com.jiejing.clean.account";
+        return "com.henrik.keeplive";
     }
 
     @Override // defpackage.mk
